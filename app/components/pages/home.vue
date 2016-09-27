@@ -51,40 +51,17 @@
     components: {
       'custom-header': Header
     },
-    methods: {
-      prettyDate() {
-        const monthNames = [
-          'January', 'February', 'March',
-          'April', 'May', 'June', 'July',
-          'August', 'September', 'October',
-          'November', 'December'
-        ];
-
-        const date = new Date();
-        const day = date.getDate();
-        const monthIndex = date.getMonth();
-        const year = date.getFullYear();
-
-        return day + ' ' + monthNames[monthIndex] + ' ' + year;
-      }
-    },
     ready() {
-      Highcharts.setOptions({
-        global: {
-          useUTC: false
-        }
-      });
-
-      const chart = new Highcharts.Chart({
+      new Highcharts.StockChart({
         chart: {
           renderTo: 'container',
           events: {
             load() {
               const series = this.series[0];
               setInterval(() => {
-                const x = new Date();
-                const y = Math.round(Math.random() * 10);
-                // series.addPoint([x, y], true, true);
+                const x = (new Date()).getTime();
+                const y = Math.round(Math.random() * 100);
+                series.addPoint([x, y], true, true);
               }, 500);
             }
           }
@@ -99,13 +76,29 @@
             count: 5,
             type: 'minute',
             text: '5M'
+          }, {
+            count: 10,
+            type: 'minute',
+            text: '10M'
+          }, {
+            count: 15,
+            type: 'minute',
+            text: '15M'
+          }, {
+            count: 30,
+            type: 'minute',
+            text: '30M'
+          }, {
+            count: 60,
+            type: 'minute',
+            text: '1H'
           }],
           inputEnabled: false,
           selected: 0
         },
 
         title: {
-          text: 'Live random data'
+          text: 'MarketsWorld Live'
         },
 
         exporting: {
@@ -113,23 +106,21 @@
         },
 
         series: [{
-          name: 'Random data',
+          name: 'Live data',
           data: (() => {
             const data = [];
-            // const time = new Date();
+            const time = (new Date()).getTime();
 
-            for (let i = 0; i <= 10; i += 1) {
-              const point = [
-                this.prettyDate(),
-                Math.round(Math.random() * 10)
-              ];
-              data.push(point);
+            for (let i = -999; i <= 0; i += 1) {
+              data.push([
+                time + i * 1000,
+                Math.round(Math.random() * 100)
+              ]);
             }
             return data;
           })()
         }]
       });
-      console.log(chart);
     }
   };
 </script>
